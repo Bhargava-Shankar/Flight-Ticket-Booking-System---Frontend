@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components{
+    .text-input{
+        @apply w-[27rem] h-[30px] rounded-[6px] outline-none p-4 pb-5 pt-5 font-semibold text-[17px]
+    }
+}

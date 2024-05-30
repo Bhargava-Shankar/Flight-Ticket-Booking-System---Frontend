@@ -5,6 +5,9 @@ import { RouterComponent } from './routers/RouterComponent.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterComponent />
+    <div className="h-[100vh]">
+      <RouterComponent />
+    </div>
+    
   </React.StrictMode>,
 )
