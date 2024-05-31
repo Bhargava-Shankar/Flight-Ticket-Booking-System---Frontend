@@ -1,18 +1,30 @@
-import passwordHide from "../../assets/svg/password-hide.svg"
-import passwordSee from "../../assets/svg/password-see.svg"
-import loginPageImage from "../../assets/svg/login-page-image.jpg"
-import Logo from "../../components/Logo.tsx";
+import passwordHide from "../../../assets/svg/password-hide.svg"
+import passwordSee from "../../../assets/svg/password-see.svg"
+import loginPageImage from "../../../assets/svg/login-page-image.jpg"
+import Logo from "../../../components/Logo.tsx";
 import { useState } from "react";
-
+import { useRegisterUser } from "./hooks/use-register.ts";
+import { useMutation } from "@tanstack/react-query";
 const Register = () => {
 
   const [isHidden, setHidden] = useState<boolean>(false)
 
   const togglePassword = () => setHidden(!isHidden);
+  const { mutate } = useRegisterUser();
 
   const handleRegister = (e: any) => {
     e.preventDefault()
-    //HANDLE LOGIN LOGIC GOES HERE
+    const event = e.target;
+    const payload = {
+      firstName: event.firstName.value,
+      lastName: event.lastName.value,
+      email: event.email.value,
+      password: event.password.value,
+    }
+    //USE REGISTER MUTATE QUERY GOES HERE
+    mutate(payload);
+    //HANDLE REGISTER LOGIC GOES HERE
+    //ALSO CHECK FOR PASSWORD AND CONFIRM PASSWORD
   }
 
   return (
@@ -21,20 +33,20 @@ const Register = () => {
         <Logo />
         <form onSubmit={(e) => handleRegister(e)} className="flex flex-col items-center p-8">
           <div className="flex flex-col">
-            <input type="text" placeholder="First Name" className="text-input mb-5 "/>
-            <input type="text" placeholder="Last Name" className="text-input "/>
+            <input type="text" name="firstName" placeholder="First Name" className="text-input mb-5 "/>
+            <input type="text" name="lastName" placeholder="Last Name" className="text-input "/>
           </div>
 
           <div className="flex flex-col justify-center mt-5">
-            <input type="text" className="text-input focus:bg-gray-100"
+            <input type="text" name = "email" className="text-input focus:bg-gray-100"
               placeholder="E-mail Address" />
           </div>
           <div className="flex flex-row mt-5 relative items-middle">
-            <input type={isHidden ? "text" : "password"} className="text-input focus:bg-gray-100"
+            <input type={isHidden ? "text" : "password"} name="password" className="text-input focus:bg-gray-100"
               placeholder="Password" typeof="password" />
           </div>
           <div className="flex flex-row mt-5 relative items-middle">
-            <input type={isHidden ? "text" : "password"} className="text-input focus:bg-gray-100"
+            <input type={isHidden ? "text" : "password"} name="confirmPassword" className="text-input focus:bg-gray-100"
               placeholder="Confirm Password" typeof="password" />
             <div className="flex flex-row items-center" onClick={() => togglePassword()}>
               {
@@ -50,8 +62,8 @@ const Register = () => {
           </div>
         </form>
       </div>
-      <div className="flex flex-row justify-center h-full w-1/2" >
-        <img src={loginPageImage} className="h-" />
+      <div className="flex flex-row h-full w-1/2" >
+        <img src={loginPageImage} className="self-center" />
       </div>
     </div>
   )

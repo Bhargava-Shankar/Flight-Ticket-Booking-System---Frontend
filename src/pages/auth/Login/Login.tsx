@@ -1,18 +1,24 @@
-import passwordHide from "../../assets/svg/password-hide.svg"
-import passwordSee from "../../assets/svg/password-see.svg"
-import loginPageImage from "../../assets/svg/login-page-image.jpg"
-import Logo from "../../components/Logo.tsx";
+import passwordHide from "../../../assets/svg/password-hide.svg"
+import passwordSee from "../../../assets/svg/password-see.svg"
+import loginPageImage from "../../../assets/svg/login-page-image.jpg"
+import Logo from "../../../components/Logo.tsx";
 import { useState } from "react";
+import { useLoginUser } from "./hooks/use-login.ts";
 
 const Login = () => {
 
   const [isHidden, setHidden] = useState<boolean>(false)
   
   const togglePassword = () => setHidden(!isHidden);
+  const { mutate } = useLoginUser();
 
   const handleLogin = (e: any) => {
-    //HANDLE LOGIN LOGIC GOES HERE
     e.preventDefault()
+    const payload = {
+      email: e.target.email.value,
+      password: e.target.password.value
+    }
+    mutate(payload);
   }
 
   return (
@@ -22,11 +28,11 @@ const Login = () => {
         <form onSubmit={(e) => handleLogin(e)} className="flex flex-col items-center p-10">
           <div className="flex flex-col justify-center">
 
-            <input type="text" className="text-input focus:bg-gray-100"
+            <input type="text" name = "email" className="text-input focus:bg-gray-100"
               placeholder="E-mail Address" />
           </div>
           <div className="flex flex-row mt-8 relative items-middle">
-            <input type={isHidden ? "text" : "password"} className="text-input focus:bg-gray-100"
+            <input type={isHidden ? "text" : "password"} name="password" className="text-input focus:bg-gray-100"
               placeholder="Password" typeof="password" />
             <div className="flex flex-row items-center" onClick={() => togglePassword()}>
               {
@@ -42,8 +48,8 @@ const Login = () => {
           </div>
         </form>
       </div>
-      <div className="flex flex-row justify-center h-full w-1/2" >
-        <img src={loginPageImage} className="h-"/>
+      <div className="flex flex-row place-items-center h-full w-1/2" >
+        <img src={loginPageImage} className=""/>
       </div>
     </div>
   )

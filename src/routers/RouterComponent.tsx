@@ -4,8 +4,8 @@ import {
     Route,
 } from "react-router-dom";
 import App from "../App";
-import Login from "../pages/auth/Login";
-import Register from "../pages/auth/Register";
+import Login from "../pages/auth/Login/Login";
+import Register from "../pages/auth/Register/Register";
 
 
 export const RouterComponent = () => {
