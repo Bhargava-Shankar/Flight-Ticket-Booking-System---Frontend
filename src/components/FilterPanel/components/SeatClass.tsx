@@ -2,7 +2,7 @@ import React from 'react'
 
 const SeatClass = () => {
   return (
-      <div>
+      <div className='mb-3'>
           <p className='text-2xl font-bold mb-3 mt-2'>Seat Class</p>
           <ul className='flex flex-col gap-2 ml-2 font-semibold'>
               <li className='flex flex-row gap-2'>

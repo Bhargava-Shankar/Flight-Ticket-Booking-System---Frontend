@@ -1,6 +1,7 @@
-import React from 'react'
 import SeatClass from './components/SeatClass'
 import Pricing from './components/Pricing'
+import Departure from './components/Departure'
+
 const FilterPanel = () => {
   return (
       <div className='bg-[#252525] h-[42rem] w-[22rem] rounded-lg text-white pt-3 px-3 '>
@@ -11,7 +12,9 @@ const FilterPanel = () => {
           <hr />
           <Pricing />
           <hr />
-          <SeatClass/>
+      <SeatClass />
+      <hr />
+      <Departure/>
     </div>
   )
 }
