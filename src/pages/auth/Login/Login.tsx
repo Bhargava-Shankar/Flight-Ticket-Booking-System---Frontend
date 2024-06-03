@@ -5,13 +5,15 @@ import Logo from "../../../components/Logo.tsx";
 import { useState } from "react";
 import { useLoginUser } from "./hooks/use-login.ts";
 import { useNavigate, useNavigation } from "react-router-dom";
+import { AxiosError } from "axios";
 
 const Login = () => {
 
   const [isHidden, setHidden] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string>()
   const navigate = useNavigate();
   const togglePassword = () => setHidden(!isHidden);
-  const { mutate, data, isSuccess } = useLoginUser();
+  const { mutate, data, isSuccess, isPending } = useLoginUser();
 
   const handleLogin = async(e: any) => {
     e.preventDefault()
@@ -19,17 +21,25 @@ const Login = () => {
       email: e.target.email.value,
       password: e.target.password.value
     }
-    await mutate(payload);
-    if (isSuccess) {
-      navigate("/");
-    }
+    mutate(payload,{
+      onSuccess: () => {
+        navigate("/");
+      },
+      onError: (data: any) => {
+        console.log(data)
+        setErrorMessage(data['response']['data']['message'])
+      }
+     });
+    
   }
 
   return (
     <div className="flex flex-row items-center justify-start h-full w-full">
       <div className="flex flex-col justify-center bg-slate-700 h-full w-1/2">
-        <Logo/>
+        <Logo />
+        <p className="text-[#FF0000] self-center text-xl">{errorMessage}</p>
         <form onSubmit={(e) => handleLogin(e)} className="flex flex-col items-center p-10">
+           
           <div className="flex flex-col justify-center">
 
             <input type="text" name = "email" className="text-input focus:bg-gray-100"

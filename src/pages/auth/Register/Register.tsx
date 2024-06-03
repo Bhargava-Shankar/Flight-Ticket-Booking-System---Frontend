@@ -5,24 +5,49 @@ import Logo from "../../../components/Logo.tsx";
 import { useState } from "react";
 import { useRegisterUser } from "./hooks/use-register.ts";
 import { useMutation } from "@tanstack/react-query";
+
+type payloadT = {
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string
+}
+import { useNavigate } from "react-router-dom";
 const Register = () => {
 
   const [isHidden, setHidden] = useState<boolean>(false)
-
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const togglePassword = () => setHidden(!isHidden);
   const { mutate } = useRegisterUser();
 
   const handleRegister = (e: any) => {
     e.preventDefault()
     const event = e.target;
-    const payload = {
+    const payload: payloadT = {
       firstName: event.firstName.value,
       lastName: event.lastName.value,
       email: event.email.value,
       password: event.password.value,
     }
+    if (payload.firstName.length == 0 || payload.lastName.length == 0) {
+      setErrorMessage("First Name and Last Name is Required")
+      return
+    }
+    if (event.password != event.confirmPassword) {
+      setErrorMessage("Confirm Password and Password should me same")
+      return
+    }
     //USE REGISTER MUTATE QUERY GOES HERE
-    mutate(payload);
+    mutate(payload, {
+      onSuccess() {
+        navigate("/login")
+            //WHO MODEL HERE        
+      },
+      onError(data: any) {
+        setErrorMessage(data['response']['data']['message'])
+      }
+    });
     //HANDLE REGISTER LOGIC GOES HERE
     //ALSO CHECK FOR PASSWORD AND CONFIRM PASSWORD
   }
@@ -31,6 +56,7 @@ const Register = () => {
     <div className="flex flex-row items-center justify-start h-full w-full">
       <div className="flex flex-col justify-center bg-slate-700 h-full w-1/2">
         <Logo />
+        <p className="self-center text-[#FF0000] ">{ errorMessage }</p>
         <form onSubmit={(e) => handleRegister(e)} className="flex flex-col items-center p-8">
           <div className="flex flex-col">
             <input type="text" name="firstName" placeholder="First Name" className="text-input mb-5 "/>
