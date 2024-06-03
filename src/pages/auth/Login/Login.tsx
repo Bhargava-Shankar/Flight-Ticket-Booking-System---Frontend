@@ -4,21 +4,25 @@ import loginPageImage from "../../../assets/svg/login-page-image.jpg"
 import Logo from "../../../components/Logo.tsx";
 import { useState } from "react";
 import { useLoginUser } from "./hooks/use-login.ts";
+import { useNavigate, useNavigation } from "react-router-dom";
 
 const Login = () => {
 
   const [isHidden, setHidden] = useState<boolean>(false)
-  
+  const navigate = useNavigate();
   const togglePassword = () => setHidden(!isHidden);
-  const { mutate } = useLoginUser();
+  const { mutate, data, isSuccess } = useLoginUser();
 
-  const handleLogin = (e: any) => {
+  const handleLogin = async(e: any) => {
     e.preventDefault()
     const payload = {
       email: e.target.email.value,
       password: e.target.password.value
     }
-    mutate(payload);
+    await mutate(payload);
+    if (isSuccess) {
+      navigate("/");
+    }
   }
 
   return (
